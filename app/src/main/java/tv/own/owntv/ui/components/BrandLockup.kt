@@ -23,9 +23,10 @@ import tv.own.owntv.ui.theme.AccentCyan
 import tv.own.owntv.ui.theme.OwnTVTheme
 
 /**
- * Theme-adaptive "OwnTV" wordmark. The provided logo asset has a near-white "Own" that vanishes on
- * AMOLED black, so the in-app lockup is drawn from brand tokens instead and stays legible on both
- * themes. The cyan play-mark and the "TV" accent are constant brand colors.
+ * Theme-adaptive "AliNK" wordmark. The logo asset (brand/logo.png) is a single-colour navy lockup
+ * that vanishes on a dark background, so the in-app lockup is drawn from brand tokens instead and
+ * stays legible on both themes. The square mark carries the "K" of the logo (the brand mark, echoing
+ * the launcher icon); the "K" of the wordmark is drawn in the constant cyan accent.
  */
 @Composable
 fun BrandLockup(
@@ -41,7 +42,7 @@ fun BrandLockup(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        // Rounded-square mark with the aLink chevron
+        // Rounded-square mark with the AliNK "K"
         val markShape = RoundedCornerShape(percent = 28)
         androidx.compose.foundation.layout.Box(
             modifier = Modifier
@@ -52,7 +53,7 @@ fun BrandLockup(
             contentAlignment = Alignment.Center,
         ) {
             OwnTVIcon(
-                icon = OwnTVIcon.CHEVRON,
+                icon = OwnTVIcon.BRAND_K,
                 tint = AccentCyan,
                 filled = true,
                 modifier = Modifier

@@ -2,7 +2,8 @@
 <resources>
     <!-- Overrides of OwnTV_Core brand strings. Placeholder identity for the aLink-IPTV fork. -->
     <string name="app_name" translatable="false">aLink IPTV</string>
-    <!-- In-app lockup (BrandLockup): normal part + accent part → "a" + "Link". -->
-    <string name="brand_own" translatable="false">a</string>
-    <string name="brand_tv" translatable="false">Link</string>
+    <!-- In-app lockup (BrandLockup): normal part + accent part → "AliN" + "K",
+         matching the AliNK logo (the "K" is the brand mark). -->
+    <string name="brand_own" translatable="false">AliN</string>
+    <string name="brand_tv" translatable="false">K</string>
 </resources>

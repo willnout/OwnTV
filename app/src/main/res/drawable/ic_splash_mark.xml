@@ -13,25 +13,25 @@
     <path
         android:fillColor="#00000000"
         android:strokeColor="#00B4D8"
-        android:strokeWidth="28"
+        android:strokeWidth="35"
         android:strokeLineCap="butt"
         android:strokeLineJoin="miter"
-        android:strokeMiterLimit="6"
-        android:pathData="M110.7,88 L110.7,200" />
+        android:strokeMiterLimit="8"
+        android:pathData="M112,85 L112,203" />
     <path
         android:fillColor="#00000000"
         android:strokeColor="#00B4D8"
-        android:strokeWidth="28"
+        android:strokeWidth="35"
         android:strokeLineCap="butt"
         android:strokeLineJoin="miter"
-        android:strokeMiterLimit="6"
-        android:pathData="M122.7,145.3 L186.7,88" />
+        android:strokeMiterLimit="8"
+        android:pathData="M125,144 L189,85" />
     <path
         android:fillColor="#00000000"
         android:strokeColor="#00B4D8"
-        android:strokeWidth="28"
+        android:strokeWidth="35"
         android:strokeLineCap="butt"
         android:strokeLineJoin="miter"
-        android:strokeMiterLimit="6"
-        android:pathData="M122.7,142.7 L186.7,200" />
+        android:strokeMiterLimit="8"
+        android:pathData="M125,144 L189,203" />
 </vector>

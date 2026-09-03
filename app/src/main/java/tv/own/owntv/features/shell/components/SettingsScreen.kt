@@ -139,6 +139,14 @@ import java.util.Locale
 import tv.own.owntv.ui.theme.labelRes
 import tv.own.owntv.ui.theme.primary
 
+/**
+ * aLink IPTV: the in-app updater (UpdateManager) points at `willnout/aLink-IPTV`, which publishes no
+ * releases, and this build is shared by hand. All of its Settings surfaces — the quick tile, the
+ * "check for updates" dialog row, the "check on startup" toggle and their search entries — are
+ * hidden. Set back to `true` to restore them if the fork ever ships releases.
+ */
+internal const val SHOW_IN_APP_UPDATER = false
+
 internal enum class TileTone { PRIMARY, SECONDARY, TERTIARY }
 
 /**
@@ -499,13 +507,13 @@ fun SettingsScreen(
             chipTone = if (autoPlayNext) TileTone.PRIMARY else TileTone.SECONDARY,
             onClick = { settingsVm.setAutoPlayNext(!autoPlayNext) },
         ),
-        RootRow(
+        if (SHOW_IN_APP_UPDATER) RootRow(
             "quick_check_update", TileTone.SECONDARY, OwnTVIcon.DOWNLOADS,
             title = stringResource(R.string.settings_quick_check_update),
             chip = stringResource(if (updateCheckOnStart) R.string.common_on else R.string.common_off),
             chipTone = if (updateCheckOnStart) TileTone.PRIMARY else TileTone.SECONDARY,
             onClick = { settingsVm.setUpdateCheckOnStart(!updateCheckOnStart) },
-        ),
+        ) else null,
         RootGroup("group_profile", stringResource(R.string.settings_profile_group), OwnTVIcon.PERSON, stringResource(R.string.settings_group_summary_profile)),
         RootRow(
             tabRowKey(SettingsTab.PROFILES), TileTone.SECONDARY, OwnTVIcon.PERSON,
@@ -769,20 +777,20 @@ fun SettingsScreen(
             focus = startupRowFocus,
             onClick = { saveScroll(); dialogReturn = startupRowFocus; showStartup = true },
         ),
-        RootRow(
+        if (SHOW_IN_APP_UPDATER) RootRow(
             "check_updates", TileTone.PRIMARY, OwnTVIcon.REFRESH,
             title = stringResource(R.string.settings_check_updates), desc = stringResource(R.string.settings_check_updates_description),
             chip = "v${tv.own.owntv.BuildConfig.VERSION_NAME}",
             focus = updateRowFocus,
             onClick = { saveScroll(); dialogReturn = updateRowFocus; showUpdate = true },
-        ),
-        RootRow(
+        ) else null,
+        if (SHOW_IN_APP_UPDATER) RootRow(
             "update_startup", TileTone.SECONDARY, OwnTVIcon.REFRESH,
             title = stringResource(R.string.settings_update_startup), desc = stringResource(R.string.settings_update_startup_description),
             chip = if (updateCheckOnStart) stringResource(R.string.common_on) else stringResource(R.string.common_off),
             chipTone = if (updateCheckOnStart) TileTone.PRIMARY else TileTone.SECONDARY,
             onClick = { settingsVm.setUpdateCheckOnStart(!updateCheckOnStart) },
-        ),
+        ) else null,
         RootRow(
             "about", TileTone.SECONDARY, OwnTVIcon.INFO,
             title = stringResource(R.string.settings_about), desc = stringResource(R.string.settings_about_description),
@@ -1057,10 +1065,10 @@ fun SettingsScreen(
             SettingsSearchEntry(stringResource(R.string.settings_group_network), stringResource(R.string.settings_dns), stringResource(R.string.settings_search_keywords_dns), OwnTVIcon.DNS, TileTone.SECONDARY) { open(SettingsTab.DNS) },
             SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_app_startup), stringResource(R.string.settings_search_keywords_startup), OwnTVIcon.POWER, TileTone.SECONDARY,
                 chip = startupLabel(startupMode)) { saveScroll(); dialogReturn = searchFieldFocus; showStartup = true },
-            SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_check_updates), stringResource(R.string.settings_search_keywords_updates), OwnTVIcon.REFRESH, TileTone.PRIMARY,
-                chip = "v${tv.own.owntv.BuildConfig.VERSION_NAME}") { saveScroll(); dialogReturn = searchFieldFocus; showUpdate = true },
-            SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_update_startup), stringResource(R.string.settings_search_keywords_update_auto), OwnTVIcon.REFRESH, TileTone.SECONDARY,
-                chip = if (updateCheckOnStart) stringResource(R.string.common_on) else stringResource(R.string.common_off), chipTone = if (updateCheckOnStart) TileTone.PRIMARY else TileTone.SECONDARY, showChevron = false) { settingsVm.setUpdateCheckOnStart(!updateCheckOnStart) },
+            if (SHOW_IN_APP_UPDATER) SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_check_updates), stringResource(R.string.settings_search_keywords_updates), OwnTVIcon.REFRESH, TileTone.PRIMARY,
+                chip = "v${tv.own.owntv.BuildConfig.VERSION_NAME}") { saveScroll(); dialogReturn = searchFieldFocus; showUpdate = true } else null,
+            if (SHOW_IN_APP_UPDATER) SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_update_startup), stringResource(R.string.settings_search_keywords_update_auto), OwnTVIcon.REFRESH, TileTone.SECONDARY,
+                chip = if (updateCheckOnStart) stringResource(R.string.common_on) else stringResource(R.string.common_off), chipTone = if (updateCheckOnStart) TileTone.PRIMARY else TileTone.SECONDARY, showChevron = false) { settingsVm.setUpdateCheckOnStart(!updateCheckOnStart) } else null,
             SettingsSearchEntry(stringResource(R.string.settings_group_app), stringResource(R.string.settings_about), stringResource(R.string.settings_search_keywords_about), OwnTVIcon.INFO, TileTone.SECONDARY) { saveScroll(); dialogReturn = searchFieldFocus; showAbout = true },
         )
         val tokens = searchQuery.trim().lowercase().split(" ").filter { it.isNotBlank() }
@@ -2005,7 +2013,7 @@ private fun FocusHighlightDialog(
 }
 
 
-private const val GITHUB_REPO = "github.com/ahXN00/OwnTV"
+private const val GITHUB_REPO = "github.com/willnout/aLink-IPTV"
 private const val TELEGRAM_LINK = "t.me/owntvplayer"
 
 /** About OwnTV: version, license, author and project link — all readable on screen (no TV browser). */

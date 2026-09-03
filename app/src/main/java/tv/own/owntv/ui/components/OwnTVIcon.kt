@@ -31,6 +31,8 @@ enum class OwnTVIcon {
     // both panel width and focus highlight, SKIP_NEXT was both channel paging and autoplay-next.
     DNS, PANEL_WIDTH, FOCUS_HIGHLIGHT, CH_NAV, AUTOPLAY_NEXT, LIVE_DOT, SEEK_BACK, SEEK_FORWARD, MORE,
     REMOTE_CHANNEL_UP, REMOTE_CHANNEL_DOWN, PAGE_TOWARD_FIRST, PAGE_TOWARD_LAST,
+    // aLink IPTV: the "K" of the AliNK logo, used as the in-app brand mark (see BrandLockup).
+    BRAND_K,
 }
 
 @Composable
@@ -252,6 +254,12 @@ fun OwnTVIcon(
             OwnTVIcon.CHEVRON -> {
                 drawLineStroke(p(9f, 5f), p(16f, 12f), tint, stroke)
                 drawLineStroke(p(16f, 12f), p(9f, 19f), tint, stroke)
+            }
+            OwnTVIcon.BRAND_K -> { // the "K" of the AliNK logo: spine + two diagonals off its edge
+                val k = Stroke(width = 2.6f * s, cap = StrokeCap.Butt, join = StrokeJoin.Miter)
+                drawLineStroke(p(9f, 6.5f), p(9f, 17.5f), tint, k)
+                drawLineStroke(p(10.2f, 12f), p(16f, 6.5f), tint, k)
+                drawLineStroke(p(10.2f, 12f), p(16f, 17.5f), tint, k)
             }
             OwnTVIcon.CHEVRON_UP -> {
                 drawLineStroke(p(5f, 15f), p(12f, 8f), tint, stroke)
