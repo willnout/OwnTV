@@ -41,7 +41,7 @@ fun BrandLockup(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        // Rounded-square play mark
+        // Rounded-square mark with the aLink chevron
         val markShape = RoundedCornerShape(percent = 28)
         androidx.compose.foundation.layout.Box(
             modifier = Modifier
@@ -52,11 +52,10 @@ fun BrandLockup(
             contentAlignment = Alignment.Center,
         ) {
             OwnTVIcon(
-                icon = OwnTVIcon.PLAY,
+                icon = OwnTVIcon.CHEVRON,
                 tint = AccentCyan,
                 filled = true,
                 modifier = Modifier
-                    .padding(start = (markSize * 0.06f).dp)
                     .size((markSize * 0.5f).dp),
             )
         }
