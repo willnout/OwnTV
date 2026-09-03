@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -182,6 +183,17 @@ fun SearchBar(
                         runCatching { pillFocus.requestFocus() }
                     }),
                 )
+                // Touch fix (see OwnTVTextField): while not editing, BasicTextField's tap handler
+                // swallows the tap and its focus request is blocked by canFocus = editing, so the
+                // parent .clickable never fires and the keyboard never opens. This transparent
+                // catcher takes the tap first; once editing it is gone.
+                if (!editing) {
+                    Box(
+                        Modifier
+                            .matchParentSize()
+                            .clickable(interactionSource = interaction, indication = null) { editing = true }
+                    )
+                }
             }
         }
     }
