@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Override of OwnTV_Core's app_name. Placeholder identity for the aLink-IPTV fork. -->
+    <string name="app_name" translatable="false">aLink IPTV</string>
+</resources>
