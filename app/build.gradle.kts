@@ -112,6 +112,17 @@ android {
             dimension = "abi"
             ndk { abiFilters += listOf("x86_64") }
         }
+        // aLink-IPTV: arm64-only flavor for hand-shared builds. `standard` bundles arm64-v8a +
+        // armeabi-v7a (~55 MB signed); dropping the 32-bit slice takes the APK under 30 MB. That is
+        // all this fork needs — it is shared by hand, not through the in-app Downloader, and there
+        // is no 32-bit-only Android TV box (Nvidia Shield 2015/2017) in the target set. `standard`
+        // is left untouched so upstream merges stay clean.
+        //   ./scripts/build-app.sh :app:assembleArm64Release
+        //   -> app/build/outputs/apk/arm64/release/app-arm64-release.apk
+        create("arm64") {
+            dimension = "abi"
+            ndk { abiFilters += listOf("arm64-v8a") }
+        }
     }
 
     // Release signing: env vars first (that is how CI injects the GitHub secrets), then Gradle
