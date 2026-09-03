@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Cold-start splash icon: the aLink chevron mark, deliberately NOT the wordmark.
+  Cold-start splash icon: the aLink "K" mark (from the AliNK logo), deliberately NOT the wordmark.
   Drawn on the 288dp splash canvas with the mark kept inside the 192dp inner circle the platform
   masks to, so it renders identically on the API 31+ system splash and the compat splash.
+  Same geometry as brand/icon.svg, scaled 288/108.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="288dp"
@@ -12,8 +13,25 @@
     <path
         android:fillColor="#00000000"
         android:strokeColor="#00B4D8"
-        android:strokeWidth="26"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M112,86 L176,144 L112,202" />
+        android:strokeWidth="28"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter"
+        android:strokeMiterLimit="6"
+        android:pathData="M110.7,88 L110.7,200" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="28"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter"
+        android:strokeMiterLimit="6"
+        android:pathData="M122.7,145.3 L186.7,88" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="28"
+        android:strokeLineCap="butt"
+        android:strokeLineJoin="miter"
+        android:strokeMiterLimit="6"
+        android:pathData="M122.7,142.7 L186.7,200" />
 </vector>
