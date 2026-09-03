@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_storage_no_access_notice">Sin acceso completo al almacenamiento solo verás carpetas, no archivos. Toca aquí para concederlo.</string>
+</resources>

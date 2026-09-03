@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -124,7 +124,7 @@ private fun StorageBrowserContent(
     }
 
     Box(Modifier.fillMaxSize().modalScrim().focusGroup(), contentAlignment = Alignment.Center) {
-        Column(Modifier.width(270.dp).clip(RoundedCornerShape(16.dp)).background(colors.surfaceContainerHigh).padding(14.dp)) {
+        Column(Modifier.widthIn(min = 320.dp, max = 460.dp).clip(RoundedCornerShape(16.dp)).background(colors.surfaceContainerHigh).padding(14.dp)) {
             Text(title, style = MaterialTheme.typography.titleSmall, color = colors.onSurface)
             Spacer(Modifier.height(4.dp))
             Text(current?.absolutePath ?: stringResource(R.string.setup_pick_location), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -152,13 +152,22 @@ private fun StorageBrowserContent(
             val files = listing.files
 
             // Cap the list to the screen (minus dialog chrome) so the footer buttons stay reachable.
-            val listMax = (androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp - 200.dp).coerceIn(140.dp, 200.dp)
+            val listMax = (androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp - 200.dp).coerceIn(200.dp, 380.dp)
             LazyColumn(Modifier.heightIn(max = listMax).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (dir == null) {
                     if (!hasAccess) {
                         item {
-                            BrowserRow(OwnTVIcon.SETTINGS, stringResource(R.string.setup_grant_storage_access), Modifier.focusRequester(firstFocus)) {
-                                StorageAccess.openStoragePermissionSettings(context)
+                            // FILE mode: without "all files access", listFiles() on a shared folder
+                            // hides the .own backup itself — the user sees folders and no file, with
+                            // nothing saying why. Lead with a callout instead of a plain row.
+                            if (mode == BrowseMode.FILE) {
+                                StorageAccessNotice(Modifier.focusRequester(firstFocus)) {
+                                    StorageAccess.openStoragePermissionSettings(context)
+                                }
+                            } else {
+                                BrowserRow(OwnTVIcon.SETTINGS, stringResource(R.string.setup_grant_storage_access), Modifier.focusRequester(firstFocus)) {
+                                    StorageAccess.openStoragePermissionSettings(context)
+                                }
                             }
                         }
                     }
@@ -225,6 +234,34 @@ private fun StorageAccess.StorageRoot.displayLabel(): String = when (kind) {
     StorageAccess.RootKind.INTERNAL -> stringResource(R.string.content_storage_internal)
     StorageAccess.RootKind.REMOVABLE -> volumeName ?: stringResource(R.string.content_storage_removable)
     StorageAccess.RootKind.APP -> stringResource(R.string.content_storage_app)
+}
+
+/**
+ * A warning callout (not a plain row) shown at the top of the FILE-mode list when the app lacks
+ * "all files access". Tapping it opens the same settings screen as the plain grant row. Tinted even
+ * when unfocused so it reads as an alert; text wraps rather than truncates.
+ */
+@Composable
+private fun StorageAccessNotice(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val colors = OwnTVTheme.colors
+    FocusableSurface(
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        contentAlignment = Alignment.CenterStart,
+        unfocusedContainerColor = colors.tertiaryContainer,
+        surface = GlassSurface.DIALOGS,
+    ) { focused ->
+        Row(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OwnTVIcon(OwnTVIcon.WARNING, tint = if (focused) colors.primary else colors.onTertiaryContainer, modifier = Modifier.size(16.dp))
+            Text(
+                stringResource(R.string.setup_storage_no_access_notice),
+                style = MaterialTheme.typography.bodySmall,
+                color = if (focused) colors.primary else colors.onTertiaryContainer,
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
 }
 
 @Composable

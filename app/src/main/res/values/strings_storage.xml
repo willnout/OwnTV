@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- aLink IPTV fork strings for the in-app storage browser (tv.own.owntv.ui.components.StorageBrowser). -->
+<resources>
+    <!-- Translators: Warning callout at the top of the storage browser when picking a backup file to
+         restore and the app has no "all files access" permission. Android then hides files the app
+         did not create, so the user sees folders but not their backup. Tapping the callout opens the
+         permission settings screen. -->
+    <string name="setup_storage_no_access_notice">Without full storage access you will only see folders, not files. Tap here to grant it.</string>
+</resources>

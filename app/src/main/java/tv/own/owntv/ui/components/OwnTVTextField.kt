@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -115,6 +116,12 @@ fun OwnTVTextField(
             // Tell the shared popup before showing the IME. If this TV publishes no inset/frame
             // change, the calibrated estimate still constrains the modal immediately.
             tvImeWatcher?.onImeRequested()
+            // Wait one frame so the recomposition that flips `canFocus = editing` to true has been
+            // applied before moving focus. Without this, requestFocus() runs while the inner field
+            // is still non-focusable, silently no-ops, no input session starts, and the following
+            // keyboard.show() has nothing to raise — on a touch device the soft keyboard never
+            // appears (D-pad hid it anyway, so the bug only showed on tablets).
+            withFrameNanos {}
             runCatching { innerFocus.requestFocus() }
             keyboard?.show()
             kotlinx.coroutines.delay(120)
@@ -170,7 +177,14 @@ fun OwnTVTextField(
                     .bringIntoViewRequester(bringIntoView)
                     .focusRequester(innerFocus)
                         .focusProperties { canFocus = editing }
-                        .onFocusChanged { if (editing && !it.isFocused) editing = false }
+                        .onFocusChanged {
+                            // Raise the soft keyboard exactly when focus actually lands (the input
+                            // session is live by then). keyboard.show() in the effect above is
+                            // best-effort and a no-op when it runs before the session exists, which
+                            // is why the IME never opened on touch tablets.
+                            if (it.isFocused) keyboard?.show()
+                            else if (editing) editing = false
+                        }
                         .onPreviewKeyEvent {
                             if (it.key == Key.Back) {
                                 if (it.type == KeyEventType.KeyUp) {
